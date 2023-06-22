@@ -1,0 +1,21 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.navigation__item {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #000000;
+}
+.navigation__item_active {
+  font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+  .navigation {
+    display: none;
+  }
+}

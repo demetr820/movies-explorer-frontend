@@ -1,0 +1,78 @@
+.user-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+.user-block__login {
+  display: block;
+  max-width: 76px;
+  height: 32px;
+  padding: 8px 20px;
+  background-color: #2be080;
+  box-sizing: border-box;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 3px;
+  color: #000;
+}
+
+.user-block__registration {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration: none;
+  text-align: center;
+  color: #000;
+}
+.user-block__account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 13px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #000000;
+  cursor: pointer;
+}
+.user-block__account::after {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: #f9f9f9 url("../../images/user.svg") center / 10px no-repeat;
+  border-radius: 6px;
+  outline: #2be080;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  /* .user-block {
+    display: none;
+  } */
+  .user-block__login {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .user-block__registration {
+    font-size: 12px;
+    line-height: 16px;
+  }
+}
+@media (max-width: 320px) {
+  .user-block {
+    gap: 14px;
+  }
+  .user-block__login {
+    padding: 12px 5px;
+    font-size: 10px;
+    line-height: 16px;
+  }
+
+  .user-block__registration {
+    font-size: 10px;
+    line-height: 16px;
+  }
+}

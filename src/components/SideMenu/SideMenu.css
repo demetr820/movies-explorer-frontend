@@ -1,0 +1,42 @@
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  height: 100vh;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+.side-menu_visible {
+  display: flex;
+}
+.side-menu__inner {
+  padding: 159px 0 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 67%;
+  background-color: #fff;
+}
+.side-menu__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.side-menu__item {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000;
+}
+@media screen and (min-width: 769px) {
+  .side-menu {
+    display: none;
+  }
+}

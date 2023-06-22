@@ -1,0 +1,39 @@
+@import url("./vendor/normalize.css");
+@import url("./vendor/fonts/inter.css");
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.link-reset {
+  text-decoration: none;
+}
+.list-reset {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.section-title {
+  padding: 0 0 23px;
+  border-bottom: 1px solid #000;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  text-align: left;
+}
+@media (max-width: 320px) {
+  .section-title {
+    padding: 0 0 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

@@ -1,0 +1,30 @@
+.bar {
+  display: flex;
+  height: 36px;
+}
+.bar__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.bar__description {
+  display: flex;
+  height: 32px;
+}
+.bar__item_completed {
+  background-color: #2be080;
+}
+.bar__item_remaining {
+  background-color: #f2f2f2;
+}
+.bar__text {
+  font-size: 14px;
+  line-height: 17px;
+}
+@media (max-width: 560px) {
+  .bar__text {
+    font-size: 11px;
+    line-height: 13px;
+  }
+}

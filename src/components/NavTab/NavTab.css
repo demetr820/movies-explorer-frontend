@@ -1,0 +1,48 @@
+.nav-tab__title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  color: #a0a0a0;
+}
+.nav-tab__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0 19px;
+}
+.nav-tab__text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+.nav-tab__link {
+  display: block;
+  width: 18px;
+  height: 17px;
+  background: url("../../images/arrow.svg") no-repeat;
+}
+.nav-tab__limiter {
+  height: 1px;
+  background-color: #e8e8e8;
+}
+@media (max-width: 768px) {
+  .nav-tab__text {
+    font-size: 28px;
+  }
+}
+@media (max-width: 560px) {
+  .nav-tab__text {
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 320px) {
+  .nav-tab__title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}

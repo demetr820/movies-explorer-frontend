@@ -1,8 +1,9 @@
-import React from "react";
-import "./SearchForm.css";
+import React, { useState } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import "./SearchForm.css";
 
 const SearchForm = () => {
+  // const [isFilterActive, setIsFilterActive] = useState(false);
   return (
     <form className="search-form">
       <div className="search-form__inner">

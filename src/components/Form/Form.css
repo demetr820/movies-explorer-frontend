@@ -42,8 +42,13 @@
   border-radius: 3px;
   border: none;
   cursor: pointer;
+  transition: all 0.6s;
 }
-.form__submit_disabled {
+.form__submit:hover {
+  opacity: 0.7;
+}
+.form__submit_disabled,
+.form__submit_disabled:hover {
   opacity: 0.5;
 }
 .form__error {

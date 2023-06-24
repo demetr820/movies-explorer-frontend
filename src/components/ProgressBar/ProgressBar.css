@@ -1,4 +1,4 @@
-.bar {
+.bar__row {
   display: flex;
   height: 36px;
 }
@@ -8,8 +8,7 @@
   align-items: center;
   text-align: center;
 }
-.bar__description {
-  display: flex;
+.bar__row:last-of-type {
   height: 32px;
 }
 .bar__item_completed {

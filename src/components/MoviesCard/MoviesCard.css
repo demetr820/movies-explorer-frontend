@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: auto 232px;
   grid-template-rows: auto;
+  background-color: #f9f9f9;
 }
 .movies-card__link {
   display: block;

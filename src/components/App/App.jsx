@@ -28,7 +28,15 @@ function App() {
   }, []);
   return (
     <CurrentUserContext.Provider
-      value={{ isSideMenuOpen, setIsSideMenuOpen, isLoggedIn, setIsLoggedIn }}
+      value={{
+        isSideMenuOpen,
+        setIsSideMenuOpen,
+        isLoggedIn,
+        setIsLoggedIn,
+        isLoading,
+        setIsLoading,
+        movies
+      }}
     >
       <div className="app container">
         <Routes>

@@ -5,20 +5,32 @@ const NavTab = () => {
   return (
     <div className="nav-tab">
       <div className="nav-tab__title">Портфолио</div>
-      <div className="nav-tab__item">
+      <a
+        className="nav-tab__item link-reset"
+        target="_blank"
+        href="https://demetr820.github.io/russian-travel/"
+      >
         <span className="nav-tab__text">Статичный сайт</span>
-        <a className="nav-tab__link"></a>
-      </div>
+        <span className="nav-tab__link"></span>
+      </a>
       <div className="nav-tab__limiter"></div>
-      <div className="nav-tab__item">
+      <a
+        className="nav-tab__item link-reset"
+        target="_blank"
+        href="https://demetr820.github.io/how-to-learn/"
+      >
         <span className="nav-tab__text">Адаптивный сайт</span>
-        <a className="nav-tab__link"></a>
-      </div>
+        <span className="nav-tab__link"></span>
+      </a>
       <div className="nav-tab__limiter"></div>
-      <div className="nav-tab__item">
+      <a
+        className="nav-tab__item link-reset"
+        target="_blank"
+        href="https://mestoproject.nomoredomains.work/"
+      >
         <span className="nav-tab__text">Одностраничное приложение</span>
-        <a className="nav-tab__link"></a>
-      </div>
+        <span className="nav-tab__link"></span>
+      </a>
     </div>
   );
 };

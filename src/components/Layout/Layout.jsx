@@ -9,7 +9,9 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <main className="main">
+        <Outlet />
+      </main>
       {isNotProfilePage && <Footer />}
     </>
   );

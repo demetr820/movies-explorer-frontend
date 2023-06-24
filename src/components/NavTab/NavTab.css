@@ -10,6 +10,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 0 19px;
+  cursor: pointer;
 }
 .nav-tab__text {
   font-style: normal;

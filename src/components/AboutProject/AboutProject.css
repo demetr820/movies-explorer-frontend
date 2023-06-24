@@ -7,6 +7,7 @@
 .about-project__columns {
   display: flex;
   justify-content: space-between;
+  gap: 40px;
   margin-bottom: 110px;
 }
 .about-project__column {
@@ -34,6 +35,7 @@
     padding: 90px 50px;
   }
   .about-project__columns {
+    gap: 30px;
     margin: 0 0 93px;
   }
   .about-project__title {

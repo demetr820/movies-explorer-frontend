@@ -33,10 +33,14 @@
   color: #000000;
 }
 .techs__list {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 90px));
+  grid-template-rows: auto;
+  grid-auto-flow: row;
+  justify-content: center;
   gap: 10px;
-  list-style: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 .techs__icon {
   display: flex;
@@ -56,7 +60,7 @@
   border-radius: 10px;
   box-sizing: border-box;
 }
-@media (max-width: 768px) {
+@media (max-width: 790px) {
   .techs {
     padding: 90px 50px;
   }
@@ -74,10 +78,6 @@
   }
 }
 @media (max-width: 550px) {
-  .techs__list {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
   .techs__title {
     font-size: 30px;
     line-height: 36px;

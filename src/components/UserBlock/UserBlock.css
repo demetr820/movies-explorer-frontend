@@ -48,9 +48,6 @@
   cursor: pointer;
 }
 @media (max-width: 768px) {
-  /* .user-block {
-    display: none;
-  } */
   .user-block__login {
     font-size: 12px;
     line-height: 16px;

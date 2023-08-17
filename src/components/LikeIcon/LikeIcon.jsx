@@ -1,37 +1,38 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import "./LikeIcon.css";
 
-const LikeIcon = ({ isLiked, isSavedMovies }) => {
+const LikeIcon = ({ isSaved, isSavedMoviesPage }) => {
+  const { pathname } = useLocation();
   return (
     <>
-      {isLiked ? (
-        isSavedMovies ? (
-          <svg
-            width="14"
-            height="12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="m7 7.06 3.005 3.006 1.06-1.061L8.06 6l3.005-3.005-1.06-1.06L7 4.938 3.994 1.934l-1.06 1.06L5.939 6 2.934 9.005l1.06 1.06L7 7.062Z"
-              fill="#000"
-            />
-          </svg>
-        ) : (
-          <svg
-            width="14"
-            height="12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M10.182 0C8.782 0 7.764.738 7 1.538 6.236.8 5.218 0 3.818 0 1.591 0 0 1.785 0 4c0 1.108.445 2.092 1.273 2.77L7 12l5.727-5.23C13.491 6.03 14 5.107 14 4c0-2.215-1.59-4-3.818-4Z"
-              fill="#EE3465"
-            />
-          </svg>
-        )
+      {pathname === "/saved-movies" ? (
+        <svg
+          width="14"
+          height="12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="m7 7.06 3.005 3.006 1.06-1.061L8.06 6l3.005-3.005-1.06-1.06L7 4.938 3.994 1.934l-1.06 1.06L5.939 6 2.934 9.005l1.06 1.06L7 7.062Z"
+            fill="#000"
+          />
+        </svg>
+      ) : null}
+      {pathname === "/movies" && isSaved ? (
+        <svg
+          width="14"
+          height="12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.182 0C8.782 0 7.764.738 7 1.538 6.236.8 5.218 0 3.818 0 1.591 0 0 1.785 0 4c0 1.108.445 2.092 1.273 2.77L7 12l5.727-5.23C13.491 6.03 14 5.107 14 4c0-2.215-1.59-4-3.818-4Z"
+            fill="#EE3465"
+          />
+        </svg>
       ) : (
         <svg
           width="14"

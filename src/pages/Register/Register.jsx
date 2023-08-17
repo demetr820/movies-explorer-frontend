@@ -5,7 +5,7 @@ import logo from "../../images/logo.svg";
 import { inputs } from "../../utils/data/inputs";
 import "./Register.css";
 
-const Register = () => {
+const Register = ({ handleRegister }) => {
   return (
     <section className="register">
       <div className="register__container">
@@ -13,7 +13,9 @@ const Register = () => {
           <img src={logo} alt="логотип" />
         </Link>
         <h2 className="register__title">Добро пожаловать!</h2>
-        <Form textSubmit="Зарегистрироваться">{inputs.register}</Form>
+        <Form handleFormSubmit={handleRegister} textSubmit="Зарегистрироваться">
+          {inputs.register}
+        </Form>
         <span className="register__login">
           Уже зарегистрированы?{" "}
           <Link className="register__link link-reset" relative to="../signin">

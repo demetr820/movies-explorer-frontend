@@ -36,6 +36,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.6.0",
     "react-router-dom": "^6.11.2",
     "react-scroll": "^1.8.9"
   }

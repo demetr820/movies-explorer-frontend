@@ -10,10 +10,12 @@ const UserBlock = () => {
     <div className="user-block">
       {!isLoggedIn ? (
         <>
-          <Link className="user-block__registration link-reset">
+          <Link className="user-block__registration link-reset" to="/signup">
             Регистрация
           </Link>
-          <Link className="user-block__login link-reset">Войти</Link>
+          <Link className="user-block__login link-reset" to="/signin">
+            Войти
+          </Link>
         </>
       ) : (
         <Link className="user-block__account link-reset" to="/profile">

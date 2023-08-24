@@ -2,4 +2,4 @@
 
 [Ссылка на макет](https://disk.yandex.ru/d/G7BjKQNjo0BDXg)
 
-[Ссылка на PR в Github](https://)
+[Ссылка на PR в Github](https://github.com/demetr820/movies-explorer-frontend/pull/3)

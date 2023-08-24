@@ -1,16 +1,17 @@
 import React from "react";
 import "./FilterCheckbox.css";
 
-const FilterCheckbox = ({
-  id,
-  isFilterActive,
-  // setIsFilterActive,
-  handleFilterMovies
-}) => {
-  const handleChecked = e => {
-    // setIsFilterActive(e.target.checked);
-    handleFilterMovies(e.target.checked);
+const FilterCheckbox = ({ id, handleFilterChange, isFilterActive }) => {
+  // const [isChecked, setIsChecked] = useState(false);
+  const handleChecked = () => {
+    // setIsChecked(!isChecked);
+    handleFilterChange(!isFilterActive);
+    localStorage.setItem("isShort", !isFilterActive);
   };
+  // useEffect(() => {
+  //   const checkboxState = JSON.parse(localStorage.getItem("isShort"));
+  //   setIsChecked(checkboxState);
+  // }, []);
   return (
     <>
       <input
@@ -19,7 +20,7 @@ const FilterCheckbox = ({
         id={id}
         type="checkbox"
         onChange={handleChecked}
-        checked={isFilterActive ? true : false}
+        checked={isFilterActive}
       />
       <label className="react-switch-label" htmlFor={id}>
         <span className={`react-switch-button`} />

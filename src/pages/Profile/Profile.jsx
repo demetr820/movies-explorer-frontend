@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Preloader from "../../components/Preloader/Preloader";
 import { useValidation } from "../../hooks/useValidation";
@@ -6,8 +6,14 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import "./Profile.css";
 
 const Profile = () => {
-  const { isLoading } = useContext(CurrentUserContext);
-  const { values, handleChange, errors, isValid } = useValidation({});
+  const { isLoading, currentUser } = useContext(CurrentUserContext);
+  const { values, setValues, handleChange, errors, isValid } = useValidation(
+    {}
+  );
+  console.log(currentUser);
+  useEffect(() => {
+    setValues({ name: currentUser.name, email: currentUser.email });
+  }, []);
   return (
     <>
       <section className="profile">

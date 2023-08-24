@@ -4,15 +4,21 @@ export const getResponse = res => {
 };
 const getShortMovies = movies => {
   return movies.filter(movie => {
-    return movie.duration < 40;
+    return movie.duration <= 40;
   });
 };
 export const getSearchResult = (query, items, isFilter) => {
   let searchResult = items.filter(item => {
-    return item["nameRU"]
-      .toString()
-      .toLowerCase()
-      .includes(query.toLowerCase());
+    return (
+      item["nameRU"]
+        .toString()
+        .toLowerCase()
+        .includes(query.toLowerCase()) ||
+      item["nameEN"]
+        .toString()
+        .toLowerCase()
+        .includes(query.toLowerCase())
+    );
   });
   if (isFilter) {
     searchResult = getShortMovies(searchResult);

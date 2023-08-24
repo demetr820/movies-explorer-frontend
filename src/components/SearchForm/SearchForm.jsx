@@ -1,16 +1,30 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import { useValidation } from "../../hooks/useValidation";
-// import { search, getShortMovies } from "../../utils/utils";
 import "./SearchForm.css";
 
-const SearchForm = ({ onSubmit, handleFilterMovies, isFilterActive }) => {
-  const { values, handleChange, errors, isValid } = useValidation({});
-
-  const handleSubmit = e => {
+const SearchForm = ({
+  onSubmit,
+  handleFilterChange,
+  isFilterActive,
+  setShowError,
+}) => {
+  const { values, setValues, handleChange, errors, isValid } = useValidation(
+    {}
+  );
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(values.search);
+    const currentValue = values.search;
+    if (isValid) {
+      onSubmit(currentValue);
+      localStorage.setItem("searchString", currentValue);
+    } else {
+      setShowError("Нужно ввести ключевое слово");
+    }
   };
+  useEffect(() => {
+    setValues({ search: localStorage.getItem("searchString") });
+  }, []);
   return (
     <form className="search-form" onSubmit={handleSubmit}>
       <div className="search-form__inner">
@@ -33,8 +47,7 @@ const SearchForm = ({ onSubmit, handleFilterMovies, isFilterActive }) => {
       </div>
       <div className="search-form__switcher">
         <FilterCheckbox
-          handleFilterMovies={handleFilterMovies}
-          // setIsFilterActive={setIsFilterActive}
+          handleFilterChange={handleFilterChange}
           isFilterActive={isFilterActive}
           id="filter-checkbox"
         />

@@ -20,9 +20,9 @@ function App() {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   // Movies state
-  const [movies, setMovies] = useState([]);
+  // const [movies, setMovies] = useState([]);
+  // const [savedMovies, setSavedMovies] = useState([]);
 
-  const [savedMovies, setSavedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -40,15 +40,15 @@ function App() {
   const handleRegister = (email, password) => {
     setIsLoading(true);
     MainApi.register(email, password)
-      .then(res => {
+      .then((res) => {
         setCurrentUser({
           name: res.name,
-          email: res.email
+          email: res.email,
         });
         setIsLoading(false);
         navigate("/signin");
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoading(false);
         console.log(err);
       });
@@ -56,14 +56,14 @@ function App() {
   const handleLogin = (email, password) => {
     setIsLoading(true);
     MainApi.login(email, password)
-      .then(res => {
+      .then((res) => {
         localStorage.setItem("jwt", res.token);
         setIsLoggedIn(true);
         setIsLoading(false);
         navigate("/movies");
         return res;
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoading(false);
         console.log(err);
       });
@@ -72,13 +72,13 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       MainApi.checkToken()
-        .then(res => {
+        .then((res) => {
           if (res) {
             setIsLoggedIn(true);
             navigate("/movies");
           }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   }, []);
   const handleGetUserInfo = async () => {
@@ -94,10 +94,10 @@ function App() {
       if (!localStorage.getItem("movies")) {
         const fetchMovies = await MoviesApi.getMovies();
         localStorage.setItem("movies", JSON.stringify(fetchMovies));
-        setMovies(fetchMovies);
+        // setMovies(fetchMovies);
       }
-      const storageMovies = JSON.parse(localStorage.getItem("movies"));
-      setMovies(() => [...storageMovies]);
+      // const storageMovies = JSON.parse(localStorage.getItem("movies"));
+      // setMovies(() => [...storageMovies]);
     } catch (err) {
       console.log(err);
     }
@@ -106,8 +106,8 @@ function App() {
     try {
       const fetchMovies = await MainApi.getMovies();
       if (fetchMovies) {
-        setSavedMovies(fetchMovies.data);
-        localStorage.setItem("savedMovies", fetchMovies.data);
+        // setSavedMovies(fetchMovies.data);
+        localStorage.setItem("savedMovies", JSON.stringify(fetchMovies.data));
       }
     } catch (err) {
       console.log(err);
@@ -123,9 +123,6 @@ function App() {
         setIsLoggedIn,
         isLoading,
         setIsLoading,
-        savedMovies,
-        setSavedMovies,
-        movies
       }}
     >
       <div className="app container">
@@ -141,7 +138,7 @@ function App() {
               path="movies"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Movies movies={movies} setMovies={setMovies} />
+                  <Movies />
                 </ProtectedRoute>
               }
             />
@@ -149,7 +146,7 @@ function App() {
               path="saved-movies"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <SavedMovies savedMovies={savedMovies} />
+                  <SavedMovies />
                 </ProtectedRoute>
               }
             />

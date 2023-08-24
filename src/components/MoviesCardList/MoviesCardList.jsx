@@ -1,36 +1,48 @@
 import React, { useEffect, useState } from "react";
 import MoviesCard from "../../components/MoviesCard/MoviesCard";
-import { useCurrentWidth } from "../../hooks/useCurrentWidth";
+// import { useCurrentWidth } from "../../hooks/useCurrentWidth";
+import {
+  MOBILE_WINDOW_WIDTH,
+  MOBILE_MOVIES_COUNT,
+  DESKTOP_MOVIES_COUNT,
+} from "../../utils/consts";
 import "./MoviesCardList.css";
 
 const MoviesCardList = ({ movies, isNoResult }) => {
-  const [moviesPerPage, setMoviesPerPage] = useState(7);
-  const [isLoadMoreButtonVisible, setIsLoadMoreButtonVisible] = useState(true);
-  const width = useCurrentWidth();
-  let page = 7;
-  const showMoreMovies = () => {
-    setMoviesPerPage(prev => prev + moviesPerPage);
-  };
-  useEffect(() => {}, []);
+  const [moviesAtTime, setMoviesAtTime] = useState(DESKTOP_MOVIES_COUNT);
+  const [isLoadMoreButtonVisible, setIsLoadMoreButtonVisible] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const handleWindowWidth = () => setWindowWidth(window.innerWidth);
   useEffect(() => {
-    if (width < 650) {
-      setMoviesPerPage(3);
+    window.addEventListener("resize", handleWindowWidth);
+    return () => {
+      window.removeEventListener("resize", handleWindowWidth);
+    };
+  }, []);
+  useEffect(() => {
+    if (windowWidth <= MOBILE_WINDOW_WIDTH) {
+      setMoviesAtTime(MOBILE_MOVIES_COUNT);
+    } else {
+      setMoviesAtTime(DESKTOP_MOVIES_COUNT);
     }
-  }, [width]);
+  }, [windowWidth]);
+  const showMoreMovies = () => {
+    setMoviesAtTime((prev) => prev + moviesAtTime);
+  };
   useEffect(() => {
-    if (movies.length > moviesPerPage) {
+    if (movies.length > moviesAtTime) {
       setIsLoadMoreButtonVisible(true);
     } else {
       setIsLoadMoreButtonVisible(false);
     }
-  }, []);
+  }, [movies.length, moviesAtTime]);
   return (
     <>
       <ul className="card-list list-reset">
         {isNoResult ? (
           <h1>Ничего не найдено!</h1>
         ) : (
-          movies.slice(0, 7).map(item => {
+          movies.slice(0, moviesAtTime).map((item) => {
             return (
               <li key={item.id || item.movieId}>
                 <MoviesCard movie={item} />

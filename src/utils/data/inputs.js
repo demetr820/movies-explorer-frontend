@@ -26,6 +26,7 @@ export const inputs = {
       type: "text",
       name: "name",
       id: "name",
+      pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+[.]{1}[a-z]{2,4}$/,
       val: {
         minLength: "2",
         required: true,

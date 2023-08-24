@@ -7,78 +7,79 @@ import "./Movies.css";
 import Preloader from "../../components/Preloader/Preloader";
 
 const Movies = () => {
-  const [searchedMovies, setSearchedMovies] = useState([]);
-  const [query, setQuery] = useState("");
+  const [filteredMovies, setFilteredMovies] = useState(
+    JSON.parse(localStorage.getItem("filteredMovies")) || []
+  );
+  const [searchString, setSearchString] = useState(
+    localStorage.getItem("searchString") || ""
+  );
   const [isLoading, setIsLoading] = useState(false);
-  const [isFilterActive, setIsFilterActive] = useState(false);
-  const [isError, setIsError] = useState("");
+  const [isShort, setIsShort] = useState(
+    JSON.parse(localStorage.getItem("isShort")) || false
+  );
+  const [showError, setShowError] = useState("");
 
-  const movies = JSON.parse(localStorage.getItem("movies")) || [];
+  const rawMovies = JSON.parse(localStorage.getItem("movies")) || [];
 
-  useEffect(() => {
-    const lastSearchResult =
-      JSON.parse(localStorage.getItem("searchResult")) || [];
-    const lastQuery = localStorage.getItem("lastQuery") || "";
-    const lastFilterState = localStorage.getItem("isShort") || false;
-    lastSearchResult && setSearchedMovies(lastSearchResult);
-    lastFilterState && setIsFilterActive(lastFilterState);
-    lastQuery && setQuery(lastQuery);
-  }, []);
   // отобразить список найденных фильмов
-  const handleRenderMovies = movies => {
-    setSearchedMovies(movies);
-    localStorage.setItem("searchResult", JSON.stringify(movies));
-    movies.length === 0 ? setIsError("Ничего не найдено:-(") : setIsError("");
-  };
-  const handleFilterMovies = (query, isFilterActive) => {
-    if (!movies.length) {
-      setIsLoading(true);
-      MoviesApi.getMovies()
-        .then(movies => {
-          localStorage.setItem("movies", JSON.stringify(movies));
-          const filterResult = query
-            ? getSearchResult(query, movies, isFilterActive)
-            : [];
-          handleRenderMovies(filterResult);
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      const filterResult = query
-        ? getSearchResult(query, movies, isFilterActive)
-        : [];
-      handleRenderMovies(filterResult);
-    }
-    console.log(query);
-    console.log(searchedMovies);
-    console.log(isFilterActive);
-  };
+  // const handleRenderMovies = (movies) => {
+  //   setSearchedMovies(movies);
+  //   localStorage.setItem("searchResult", JSON.stringify(movies));
+  //   movies.length === 0
+  //     ? setShowError("Ничего не найдено:-(")
+  //     : setShowError("");
+  // };
+  // const handleFilterMovies = (query, isFilterActive) => {
+  //   if (movies.length === 0) {
+  //     setIsLoading(true);
+  //     MoviesApi.getMovies()
+  //       .then((movies) => {
+  //         localStorage.setItem("movies", JSON.stringify(movies));
+  //         const filterResult = query
+  //           ? getSearchResult(query, movies, isFilterActive)
+  //           : [];
+  //         handleRenderMovies(filterResult);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       })
+  //       .finally(() => {
+  //         setIsLoading(false);
+  //       });
+  //   } else {
+  //     const filterResult = query
+  //       ? getSearchResult(query, movies, isFilterActive)
+  //       : [];
+  //     handleRenderMovies(filterResult);
+  //   }
+  // };
   // действие при сабмите формы поиска
-  const handleMoviesSearch = query => {
-    setQuery(query);
-    localStorage.setItem("lastQuery", query);
-    handleFilterMovies(query, isFilterActive);
-  };
+  // const handleMoviesSearch = (query) => {
+  //   setQuery(query);
+  //   localStorage.setItem("lastQuery", query);
+  //   handleFilterMovies(query, isFilterActive);
+  // };
   // ☑️ Включить или отключить фильтр короткометражек
-  const handleFilterChange = isChecked => {
-    setIsFilterActive(isChecked);
-    localStorage.setItem("isShort", isChecked);
-    handleFilterMovies(query, isFilterActive);
-  };
+  // const handleFilterChange = (isChecked) => {
+  //   setIsFilterActive(isChecked);
+  //   localStorage.setItem("isShort", isChecked);
+  //   handleFilterMovies(query, isFilterActive);
+  // };
+  useEffect(() => {
+    const result = getSearchResult(searchString, rawMovies, isShort);
+    setFilteredMovies(result);
+    localStorage.setItem("filteredMovies", JSON.stringify(result));
+  }, [searchString, isShort]);
   return (
     <section className="movies">
       <SearchForm
-        onSubmit={handleMoviesSearch}
-        // setIsFilterActive={setIsFilterActive}
-        isFilterActive={isFilterActive}
-        handleFilterMovies={handleFilterChange}
+        setShowError={setShowError}
+        onSubmit={setSearchString}
+        handleFilterChange={setIsShort}
+        isFilterActive={isShort}
       />
       <div className="movies__items">
-        {isLoading ? <Preloader /> : <MoviesCardList movies={searchedMovies} />}
+        {isLoading ? <Preloader /> : <MoviesCardList movies={filteredMovies} />}
       </div>
     </section>
   );

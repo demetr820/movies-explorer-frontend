@@ -1,16 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../Logo/Logo";
-import React from "react";
+import React, { useContext } from "react";
 import Burger from "../Burger/Burger";
 import Navigation from "../Navigation/Navigation";
 import UserBlock from "../UserBlock/UserBlock";
 import SideMenu from "../SideMenu/SideMenu";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import "./Header.css";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function Header(props) {
+const Header = (props) => {
   const { pathname } = useLocation();
-
+  const { isLoggedIn } = useContext(CurrentUserContext);
   const isSizeMD = useMediaQuery("(max-width: 768px)");
   return (
     <header className="header">
@@ -21,7 +22,7 @@ function Header(props) {
           <Logo />
         </Link>
       )}
-      <Navigation />
+      {isLoggedIn && <Navigation />}
       {!isSizeMD && <UserBlock />}
       {isSizeMD && (
         <>
@@ -31,5 +32,5 @@ function Header(props) {
       )}
     </header>
   );
-}
+};
 export default Header;

@@ -1,0 +1,10 @@
+.popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+  outline: 2px dotted navy;
+  background-color: green;
+}

@@ -1,29 +1,27 @@
 import React, { useEffect } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import { useValidation } from "../../hooks/useValidation";
+import { useLocation } from "react-router-dom";
 import "./SearchForm.css";
 
-const SearchForm = ({
-  onSubmit,
-  handleFilterChange,
-  isFilterActive,
-  setShowError,
-}) => {
+const SearchForm = ({ onSubmit, handleFilterChange, setShowError }) => {
   const { values, setValues, handleChange, errors, isValid } = useValidation(
     {}
   );
+  const { pathname } = useLocation();
   const handleSubmit = (e) => {
     e.preventDefault();
     const currentValue = values.search;
     if (isValid) {
       onSubmit(currentValue);
-      localStorage.setItem("searchString", currentValue);
     } else {
       setShowError("Нужно ввести ключевое слово");
     }
   };
   useEffect(() => {
-    setValues({ search: localStorage.getItem("searchString") });
+    if (pathname === "/movies") {
+      setValues({ search: localStorage.getItem("searchString") });
+    }
   }, []);
   return (
     <form className="search-form" onSubmit={handleSubmit}>
@@ -48,7 +46,6 @@ const SearchForm = ({
       <div className="search-form__switcher">
         <FilterCheckbox
           handleFilterChange={handleFilterChange}
-          isFilterActive={isFilterActive}
           id="filter-checkbox"
         />
         <label>Короткометражки</label>

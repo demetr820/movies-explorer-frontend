@@ -18,7 +18,7 @@ const Register = ({ handleRegister }) => {
         </Form>
         <span className="register__login">
           Уже зарегистрированы?{" "}
-          <Link className="register__link link-reset" relative to="../signin">
+          <Link className="register__link link-reset" to="/movies">
             Войти
           </Link>
         </span>

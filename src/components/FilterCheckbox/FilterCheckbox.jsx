@@ -2,16 +2,9 @@ import React from "react";
 import "./FilterCheckbox.css";
 
 const FilterCheckbox = ({ id, handleFilterChange, isFilterActive }) => {
-  // const [isChecked, setIsChecked] = useState(false);
   const handleChecked = () => {
-    // setIsChecked(!isChecked);
-    handleFilterChange(!isFilterActive);
-    localStorage.setItem("isShort", !isFilterActive);
+    handleFilterChange();
   };
-  // useEffect(() => {
-  //   const checkboxState = JSON.parse(localStorage.getItem("isShort"));
-  //   setIsChecked(checkboxState);
-  // }, []);
   return (
     <>
       <input

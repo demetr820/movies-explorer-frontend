@@ -8,7 +8,7 @@ import {
 } from "../../utils/consts";
 import "./MoviesCardList.css";
 
-const MoviesCardList = ({ movies, isNoResult }) => {
+const MoviesCardList = ({ movies }) => {
   const [moviesAtTime, setMoviesAtTime] = useState(DESKTOP_MOVIES_COUNT);
   const [isLoadMoreButtonVisible, setIsLoadMoreButtonVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -36,11 +36,12 @@ const MoviesCardList = ({ movies, isNoResult }) => {
       setIsLoadMoreButtonVisible(false);
     }
   }, [movies.length, moviesAtTime]);
+
   return (
     <>
       <ul className="card-list list-reset">
-        {isNoResult ? (
-          <h1>Ничего не найдено!</h1>
+        {movies.length === 0 ? (
+          <span className="card-list__not-found">Ничего не найдено</span>
         ) : (
           movies.slice(0, moviesAtTime).map((item) => {
             return (

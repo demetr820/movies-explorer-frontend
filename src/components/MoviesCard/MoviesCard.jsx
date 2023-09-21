@@ -1,21 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import LikeIcon from "../LikeIcon/LikeIcon";
 import { useLocation } from "react-router-dom";
 import { formatDuration, imageUrlCheck, endpoint } from "../../utils/utils";
 import { useState } from "react";
 import * as MainApi from "../../utils/MainApi";
 import "./MoviesCard.css";
-// import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 const MoviesCard = ({ movie }) => {
   const { pathname } = useLocation();
   const isSavedMoviesPage = pathname === "/saved-movies";
   const [isSaved, setIsSaved] = useState(false);
-  const [savedMovies, setSavedMovies] = useState(
-    JSON.parse(localStorage.getItem("savedMovies")) || []
-  );
+  const { savedMovies, setSavedMovies } = useContext(CurrentUserContext);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    console.log(savedMovies);
     // Проверить установлен лайк или нет
     if (savedMovies.length !== 0) {
       const savedMovie = savedMovies.some((item) => {

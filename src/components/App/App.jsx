@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Main from "../../pages/Main/Main";
-import { useState, useCallback } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Movies from "../../pages/Movies/Movies";
@@ -12,6 +12,8 @@ import Register from "../../pages/Register/Register";
 import Login from "../../pages/Login/Login";
 import Profile from "../../pages/Profile/Profile";
 import NotFound from "../../pages/NotFound/NotFound";
+import Popup from "../Popup/Popup";
+
 import Layout from "../Layout/Layout";
 import "./App.css";
 
@@ -19,41 +21,58 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  // Movies state
-  // const [movies, setMovies] = useState([]);
-  // const [savedMovies, setSavedMovies] = useState([]);
-
+  const [movies, setMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { pathname } = useLocation();
   useEffect(() => {
     handleTokenCheck();
-  }, [isLoggedIn, handleTokenCheck]);
+  }, []);
 
   // GET USER INFO MOVIES AND SAVED MOVIES
   useEffect(() => {
-    handleGetUserInfo();
-    handleGetMovies();
-    handleGetSavedMovies();
-  }, [isLoggedIn]);
-
-  const handleRegister = (email, password) => {
+    Promise.all([
+      MainApi.getUserInfo(),
+      MoviesApi.getMovies(),
+      MainApi.getMovies(),
+    ]).then(([me, movies, savedMovies]) => {
+      console.log(savedMovies);
+      localStorage.setItem("movies", JSON.stringify(movies));
+      localStorage.setItem("saved-movies", JSON.stringify(savedMovies.data));
+      setCurrentUser(me);
+      setMovies(movies);
+      setSavedMovies(savedMovies.data);
+    });
+  }, []);
+  console.log(savedMovies);
+  const handleRegister = (formData) => {
+    const { name, email, password } = formData;
     setIsLoading(true);
-    MainApi.register(email, password)
+    MainApi.register(name, email, password)
       .then((res) => {
         setCurrentUser({
           name: res.name,
           email: res.email,
         });
         setIsLoading(false);
-        navigate("/signin");
+        MainApi.login(formData)
+          .then((res) => {
+            localStorage.setItem("jwt", res.token);
+            setIsLoggedIn(true);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            console.log(err);
+          });
       })
       .catch((err) => {
         setIsLoading(false);
         console.log(err);
       });
   };
-  const handleLogin = (email, password) => {
+  const handleLogin = (formData) => {
+    const { email, password } = formData;
     setIsLoading(true);
     MainApi.login(email, password)
       .then((res) => {
@@ -68,19 +87,25 @@ function App() {
         console.log(err);
       });
   };
-  const handleTokenCheck = useCallback(async () => {
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setCurrentUser({});
+    setIsLoading(false);
+    navigate("/");
+  };
+
+  const handleTokenCheck = () => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       MainApi.checkToken()
-        .then((res) => {
-          if (res) {
-            setIsLoggedIn(true);
-            navigate("/movies");
-          }
+        .then(() => {
+          setIsLoggedIn(true);
+          navigate(pathname);
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  };
   const handleGetUserInfo = async () => {
     try {
       const user = await MainApi.getUserInfo();
@@ -89,25 +114,33 @@ function App() {
       console.log(err);
     }
   };
+  const handleEditProfile = (formData) => {
+    setIsLoading(true);
+    MainApi.setUserInfo(formData)
+      .then((res) => {
+        setCurrentUser(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+  };
   const handleGetMovies = async () => {
     try {
       if (!localStorage.getItem("movies")) {
         const fetchMovies = await MoviesApi.getMovies();
         localStorage.setItem("movies", JSON.stringify(fetchMovies));
-        // setMovies(fetchMovies);
       }
-      // const storageMovies = JSON.parse(localStorage.getItem("movies"));
-      // setMovies(() => [...storageMovies]);
     } catch (err) {
       console.log(err);
     }
   };
   const handleGetSavedMovies = async () => {
     try {
-      const fetchMovies = await MainApi.getMovies();
-      if (fetchMovies) {
-        // setSavedMovies(fetchMovies.data);
-        localStorage.setItem("savedMovies", JSON.stringify(fetchMovies.data));
+      if (!localStorage.getItem("saved-movies")) {
+        const fetchMovies = await MainApi.getMovies();
+        localStorage.setItem("movies", JSON.stringify(fetchMovies));
       }
     } catch (err) {
       console.log(err);
@@ -120,12 +153,14 @@ function App() {
         isSideMenuOpen,
         setIsSideMenuOpen,
         isLoggedIn,
-        setIsLoggedIn,
+        savedMovies,
+        setSavedMovies,
         isLoading,
         setIsLoading,
       }}
     >
       <div className="app container">
+        {/* <Popup /> */}
         <Routes>
           <Route
             path="/signup"
@@ -138,7 +173,7 @@ function App() {
               path="movies"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Movies />
+                  <Movies movies={movies} savedMovies={savedMovies} />
                 </ProtectedRoute>
               }
             />
@@ -146,7 +181,7 @@ function App() {
               path="saved-movies"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <SavedMovies />
+                  <SavedMovies savedMovies={savedMovies} />
                 </ProtectedRoute>
               }
             />
@@ -154,7 +189,10 @@ function App() {
               path="profile"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Profile />
+                  <Profile
+                    handleEditProfile={handleEditProfile}
+                    handleLogout={handleLogout}
+                  />
                 </ProtectedRoute>
               }
             />

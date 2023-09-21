@@ -1,24 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import MoviesCardList from "../../components/MoviesCardList/MoviesCardList";
+import * as MainApi from "../../utils/MainApi";
+import { getSearchResult } from "../../utils/utils";
 import "./SavedMovies.css";
 
-const SavedMovies = () => {
-  const [savedMovies, setSavedMovies] = useState(
-    JSON.parse(localStorage.getItem("savedMovies")) || []
-  );
+const SavedMovies = ({ savedMovies }) => {
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [searchString, setSearchString] = useState("");
   const [isShort, setIsShort] = useState(false);
-  const handleMoviesSearch = (query) => {};
+  console.log(savedMovies);
+  useEffect(() => {
+    const result = getSearchResult(searchString, savedMovies, isShort);
+    setFilteredMovies(result);
+  }, [searchString, isShort]);
+
+  const handleFilterChange = () => {
+    setIsShort(!isShort);
+  };
+  const handleSearch = (keyWord) => {
+    setSearchString(keyWord);
+  };
   return (
     <>
       <div className="movies container">
         <SearchForm
-          onSubmit={handleMoviesSearch}
-          setIsFilterActive={setIsShort}
-          isFilterActive={isShort}
+          onSubmit={handleSearch}
+          handleFilterChange={handleFilterChange}
         />
         <section className="movies__items">
-          <MoviesCardList movies={savedMovies} />
+          <MoviesCardList movies={filteredMovies} />
         </section>
       </div>
     </>

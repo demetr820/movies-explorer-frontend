@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import Main from "../../pages/Main/Main";
 import { useState } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Movies from "../../pages/Movies/Movies";
@@ -24,28 +30,33 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  // Popup
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  useEffect(() => {
-    handleTokenCheck();
-  }, []);
 
   // GET USER INFO MOVIES AND SAVED MOVIES
   useEffect(() => {
-    Promise.all([
-      MainApi.getUserInfo(),
-      MoviesApi.getMovies(),
-      MainApi.getMovies(),
-    ]).then(([me, movies, savedMovies]) => {
-      console.log(savedMovies);
-      localStorage.setItem("movies", JSON.stringify(movies));
-      localStorage.setItem("saved-movies", JSON.stringify(savedMovies.data));
-      setCurrentUser(me);
-      setMovies(movies);
-      setSavedMovies(savedMovies.data);
-    });
+    const fetchMovies = async () => {
+      try {
+        const fetchUser = await MainApi.getUserInfo();
+        const fetchMovies = await MoviesApi.getMovies();
+        const fetchSavedMovies = await MainApi.getMovies();
+        localStorage.setItem("movies", JSON.stringify(fetchMovies));
+        localStorage.setItem("saved-movies", JSON.stringify(fetchSavedMovies));
+        setCurrentUser(fetchUser);
+        setMovies(fetchMovies);
+        setSavedMovies(fetchSavedMovies.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (isLoggedIn) fetchMovies();
+  }, [isLoggedIn]);
+  useEffect(() => {
+    handleTokenCheck();
   }, []);
-  console.log(savedMovies);
   const handleRegister = (formData) => {
     const { name, email, password } = formData;
     setIsLoading(true);
@@ -56,18 +67,23 @@ function App() {
           email: res.email,
         });
         setIsLoading(false);
-        MainApi.login(formData)
+        MainApi.login(email, password)
           .then((res) => {
             localStorage.setItem("jwt", res.token);
             setIsLoggedIn(true);
+            setPopupMessage("Вы зарегистрированы");
+            setIsPopupOpen(true);
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            setPopupMessage("Ошибка авторизации");
+            setIsPopupOpen(true);
           });
       })
       .catch((err) => {
         setIsLoading(false);
+        setPopupMessage("Ошибка регистрации");
+        setIsPopupOpen(true);
         console.log(err);
       });
   };
@@ -79,8 +95,8 @@ function App() {
         localStorage.setItem("jwt", res.token);
         setIsLoggedIn(true);
         setIsLoading(false);
-        navigate("/movies");
-        return res;
+        setPopupMessage("Вы залогинились");
+        setIsPopupOpen(true);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -106,14 +122,6 @@ function App() {
         .catch((err) => console.log(err));
     }
   };
-  const handleGetUserInfo = async () => {
-    try {
-      const user = await MainApi.getUserInfo();
-      setCurrentUser(user);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const handleEditProfile = (formData) => {
     setIsLoading(true);
     MainApi.setUserInfo(formData)
@@ -125,26 +133,6 @@ function App() {
         setIsLoading(false);
         console.log(err);
       });
-  };
-  const handleGetMovies = async () => {
-    try {
-      if (!localStorage.getItem("movies")) {
-        const fetchMovies = await MoviesApi.getMovies();
-        localStorage.setItem("movies", JSON.stringify(fetchMovies));
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const handleGetSavedMovies = async () => {
-    try {
-      if (!localStorage.getItem("saved-movies")) {
-        const fetchMovies = await MainApi.getMovies();
-        localStorage.setItem("movies", JSON.stringify(fetchMovies));
-      }
-    } catch (err) {
-      console.log(err);
-    }
   };
   return (
     <CurrentUserContext.Provider
@@ -160,13 +148,32 @@ function App() {
       }}
     >
       <div className="app container">
-        {/* <Popup /> */}
+        <Popup
+          isOpen={isPopupOpen}
+          onClose={setIsPopupOpen}
+          message={popupMessage}
+        />
         <Routes>
           <Route
             path="/signup"
-            element={<Register handleRegister={handleRegister} />}
+            element={
+              isLoggedIn ? (
+                <Navigate to="/movies" />
+              ) : (
+                <Register handleRegister={handleRegister} />
+              )
+            }
           />
-          <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
+          <Route
+            path="/signin"
+            element={
+              isLoggedIn ? (
+                <Navigate to="/movies" />
+              ) : (
+                <Login handleLogin={handleLogin} />
+              )
+            }
+          />
           <Route path="/" element={<Layout />}>
             <Route index element={<Main />} />
             <Route

@@ -41,6 +41,7 @@
   background-color: transparent;
   border: none;
   margin-top: auto;
+  cursor: pointer;
 }
 .movies-card__thumb {
   display: block;

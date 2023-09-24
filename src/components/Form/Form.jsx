@@ -28,10 +28,10 @@ const Form = ({ children, handleFormSubmit, textSubmit }) => {
       </div>
     );
   });
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     let data = {};
-    children.map(child => {
+    children.map((child) => {
       data[child.name] = values[child.name];
     });
     handleFormSubmit(data);
@@ -39,12 +39,16 @@ const Form = ({ children, handleFormSubmit, textSubmit }) => {
   return (
     <form className="form" onSubmit={handleSubmit}>
       {inputs}
-      <button
-        className={`form__submit ${isValid ? "" : " form__submit_disabled"}`}
-        disabled={!isValid}
-      >
-        {isLoading ? <Preloader /> : textSubmit}
-      </button>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <button
+          className={`form__submit ${isValid ? "" : " form__submit_disabled"}`}
+          disabled={!isValid}
+        >
+          {textSubmit}
+        </button>
+      )}
     </form>
   );
 };

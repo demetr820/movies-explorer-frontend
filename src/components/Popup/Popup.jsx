@@ -1,10 +1,12 @@
 import React from "react";
 import "./Popup.css";
-const Popup = () => {
+const Popup = ({ isOpen, onClose, message }) => {
   return (
-    <div className="popup">
-      <p>kdfjek djfjidjfdjfd</p>
-      <button>Ok</button>
+    <div className={`popup${isOpen ? " popup_visible" : ""}`}>
+      <div className="popup__inner">
+        <p>{message}</p>
+        <button onClick={() => onClose(false)}>Ok</button>
+      </div>
     </div>
   );
 };

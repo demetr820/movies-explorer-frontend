@@ -4,8 +4,8 @@ import { useLocation } from "react-router-dom";
 import { formatDuration, imageUrlCheck, endpoint } from "../../utils/utils";
 import { useState } from "react";
 import * as MainApi from "../../utils/MainApi";
-import "./MoviesCard.css";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import "./MoviesCard.css";
 
 const MoviesCard = ({ movie }) => {
   const { pathname } = useLocation();

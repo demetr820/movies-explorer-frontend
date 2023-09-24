@@ -9,11 +9,10 @@ const SavedMovies = ({ savedMovies }) => {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchString, setSearchString] = useState("");
   const [isShort, setIsShort] = useState(false);
-  console.log(savedMovies);
   useEffect(() => {
     const result = getSearchResult(searchString, savedMovies, isShort);
     setFilteredMovies(result);
-  }, [searchString, isShort]);
+  }, [searchString, isShort, savedMovies]);
 
   const handleFilterChange = () => {
     setIsShort(!isShort);

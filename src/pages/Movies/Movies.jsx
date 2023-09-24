@@ -19,15 +19,14 @@ const Movies = ({ movies }) => {
   );
   const [showError, setShowError] = useState("");
 
-  // const rawMovies = JSON.parse(localStorage.getItem("movies")) || [];
-
   useEffect(() => {
+    console.log(movies);
     if (searchString !== "") {
       const result = getSearchResult(searchString, movies, isShort);
       setFilteredMovies(result);
       localStorage.setItem("filteredMovies", JSON.stringify(result));
     }
-  }, [searchString, isShort]);
+  }, [searchString, isShort, movies]);
   const handleFilterChange = () => {
     setIsShort(!isShort);
     localStorage.setItem("isShort", !isShort);

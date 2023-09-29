@@ -44,7 +44,7 @@ const Form = ({ children, handleFormSubmit, textSubmit }) => {
       ) : (
         <button
           className={`form__submit ${isValid ? "" : " form__submit_disabled"}`}
-          disabled={!isValid}
+          disabled={!isValid || isLoading}
         >
           {textSubmit}
         </button>

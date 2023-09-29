@@ -14,7 +14,6 @@ const MoviesCard = ({ movie }) => {
   const { savedMovies, setSavedMovies } = useContext(CurrentUserContext);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    console.log(savedMovies);
     // Проверить установлен лайк или нет
     if (savedMovies.length !== 0) {
       const savedMovie = savedMovies.some((item) => {

@@ -72,7 +72,7 @@ const Profile = ({ handleLogout, handleEditProfile }) => {
             className={`profile__submit ${
               isValid && isEdit ? "" : " profile__submit_disabled"
             }`}
-            disabled={!isValid || !isEdit}
+            disabled={!isValid || !isEdit || isLoading}
           >
             {isLoading ? <Preloader /> : "Редактировать"}
           </button>

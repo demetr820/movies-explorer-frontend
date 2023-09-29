@@ -20,7 +20,6 @@ const Movies = ({ movies }) => {
   const [showError, setShowError] = useState("");
 
   useEffect(() => {
-    console.log(movies);
     if (searchString !== "") {
       const result = getSearchResult(searchString, movies, isShort);
       setFilteredMovies(result);

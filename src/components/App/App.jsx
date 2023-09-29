@@ -1,13 +1,7 @@
 import React, { useEffect } from "react";
 import Main from "../../pages/Main/Main";
 import { useState } from "react";
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Movies from "../../pages/Movies/Movies";
@@ -38,6 +32,9 @@ function App() {
 
   // GET USER INFO MOVIES AND SAVED MOVIES
   useEffect(() => {
+    handleTokenCheck();
+  }, []);
+  useEffect(() => {
     const fetchMovies = async () => {
       try {
         const fetchUser = await MainApi.getUserInfo();
@@ -54,9 +51,6 @@ function App() {
     };
     if (isLoggedIn) fetchMovies();
   }, [isLoggedIn]);
-  useEffect(() => {
-    handleTokenCheck();
-  }, []);
   const handleRegister = (formData) => {
     const { name, email, password } = formData;
     setIsLoading(true);
@@ -74,17 +68,18 @@ function App() {
             setPopupMessage("Вы зарегистрированы");
             setIsPopupOpen(true);
           })
-          .catch((err) => {
+          .catch(async (err) => {
+            const { message } = await err.json();
             setIsLoading(false);
-            setPopupMessage("Ошибка авторизации");
+            setPopupMessage(message);
             setIsPopupOpen(true);
           });
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        const { message } = await err.json();
         setIsLoading(false);
-        setPopupMessage("Ошибка регистрации");
+        setPopupMessage(message);
         setIsPopupOpen(true);
-        console.log(err);
       });
   };
   const handleLogin = (formData) => {
@@ -98,9 +93,11 @@ function App() {
         setPopupMessage("Вы залогинились");
         setIsPopupOpen(true);
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        const { message } = await err.json();
         setIsLoading(false);
-        console.log(err);
+        setPopupMessage(message);
+        setIsPopupOpen(true);
       });
   };
   const handleLogout = () => {
@@ -112,8 +109,7 @@ function App() {
   };
 
   const handleTokenCheck = () => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
+    if (localStorage.getItem("jwt")) {
       MainApi.checkToken()
         .then(() => {
           setIsLoggedIn(true);
@@ -129,9 +125,11 @@ function App() {
         setCurrentUser(res);
         setIsLoading(false);
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        const { message } = await err.json();
         setIsLoading(false);
-        console.log(err);
+        setPopupMessage(message);
+        setIsPopupOpen(true);
       });
   };
   return (
@@ -154,30 +152,10 @@ function App() {
           message={popupMessage}
         />
         <Routes>
-          <Route
-            path="/signup"
-            element={
-              isLoggedIn ? (
-                <Navigate to="/movies" />
-              ) : (
-                <Register handleRegister={handleRegister} />
-              )
-            }
-          />
-          <Route
-            path="/signin"
-            element={
-              isLoggedIn ? (
-                <Navigate to="/movies" />
-              ) : (
-                <Login handleLogin={handleLogin} />
-              )
-            }
-          />
           <Route path="/" element={<Layout />}>
             <Route index element={<Main />} />
             <Route
-              path="movies"
+              path="/movies"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <Movies movies={movies} savedMovies={savedMovies} />
@@ -185,7 +163,7 @@ function App() {
               }
             />
             <Route
-              path="saved-movies"
+              path="/saved-movies"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <SavedMovies savedMovies={savedMovies} />
@@ -193,7 +171,7 @@ function App() {
               }
             />
             <Route
-              path="profile"
+              path="/profile"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <Profile
@@ -204,7 +182,12 @@ function App() {
               }
             />
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route
+            path="/signup"
+            element={<Register handleRegister={handleRegister} />}
+          />
+          <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </div>
     </CurrentUserContext.Provider>

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import { useValidation } from "../../hooks/useValidation";
 import { useLocation } from "react-router-dom";
 import "./SearchForm.css";
 
-const SearchForm = ({ onSubmit, handleFilterChange, setShowError }) => {
+const SearchForm = ({ onSubmit, handleFilterChange, isFilterActive }) => {
   const { values, setValues, handleChange, errors, isValid } = useValidation(
     {}
   );
@@ -46,6 +46,7 @@ const SearchForm = ({ onSubmit, handleFilterChange, setShowError }) => {
         <FilterCheckbox
           handleFilterChange={handleFilterChange}
           id="filter-checkbox"
+          isFilterActive={isFilterActive}
         />
         <label>Короткометражки</label>
       </div>

@@ -26,6 +26,7 @@ const SavedMovies = ({ savedMovies }) => {
         <SearchForm
           onSubmit={handleSearch}
           handleFilterChange={handleFilterChange}
+          isFilterActive={isShort}
         />
         <section className="movies__items">
           <MoviesCardList movies={filteredMovies} />

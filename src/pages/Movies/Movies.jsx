@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import MoviesCardList from "../../components/MoviesCardList/MoviesCardList";
 import { getSearchResult } from "../../utils/utils";
-import * as MainApi from "../../utils/MainApi";
-import "./Movies.css";
 import Preloader from "../../components/Preloader/Preloader";
+import "./Movies.css";
 
 const Movies = ({ movies }) => {
   const [filteredMovies, setFilteredMovies] = useState(
@@ -14,18 +13,8 @@ const Movies = ({ movies }) => {
     localStorage.getItem("searchString") || ""
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [isShort, setIsShort] = useState(
-    JSON.parse(localStorage.getItem("isShort")) || false
-  );
-  const [showError, setShowError] = useState("");
+  const [isShort, setIsShort] = useState(false);
 
-  useEffect(() => {
-    if (searchString !== "") {
-      const result = getSearchResult(searchString, movies, isShort);
-      setFilteredMovies(result);
-      localStorage.setItem("filteredMovies", JSON.stringify(result));
-    }
-  }, [searchString, isShort, movies]);
   const handleFilterChange = () => {
     setIsShort(!isShort);
     localStorage.setItem("isShort", !isShort);
@@ -34,12 +23,24 @@ const Movies = ({ movies }) => {
     setSearchString(keyWord);
     localStorage.setItem("searchString", keyWord);
   };
+  useEffect(() => {
+    if (localStorage.getItem("isShort")) {
+      setIsShort(JSON.parse(localStorage.getItem("isShort")));
+    }
+  }, []);
+  useEffect(() => {
+    if (searchString !== "") {
+      const result = getSearchResult(searchString, movies, isShort);
+      setFilteredMovies(result);
+      localStorage.setItem("filteredMovies", JSON.stringify(result));
+    }
+  }, [searchString, isShort, movies]);
   return (
     <section className="movies">
       <SearchForm
-        setShowError={setShowError}
         onSubmit={handleSearch}
         handleFilterChange={handleFilterChange}
+        isFilterActive={isShort}
       />
       <div className="movies__items">
         {isLoading ? <Preloader /> : <MoviesCardList movies={filteredMovies} />}

@@ -8,6 +8,7 @@ const SearchForm = ({ onSubmit, handleFilterChange, setShowError }) => {
   const { values, setValues, handleChange, errors, isValid } = useValidation(
     {}
   );
+  const [showError, setShowError] = useState("");
   const { pathname } = useLocation();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,9 +38,7 @@ const SearchForm = ({ onSubmit, handleFilterChange, setShowError }) => {
           required
         />
         {errors.search && (
-          <span className="search-form__error">
-            Нужно ввести ключевое слово
-          </span>
+          <span className="search-form__error">{showError}</span>
         )}
         <button className="search-form__button">Найти</button>
       </div>

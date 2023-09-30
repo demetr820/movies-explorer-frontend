@@ -67,6 +67,7 @@ function App() {
             setIsLoggedIn(true);
             setPopupMessage("Вы зарегистрированы");
             setIsPopupOpen(true);
+            navigate("/movies");
           })
           .catch(async (err) => {
             const { message } = await err.json();
@@ -92,6 +93,7 @@ function App() {
         setIsLoading(false);
         setPopupMessage("Вы залогинились");
         setIsPopupOpen(true);
+        navigate("/movies");
       })
       .catch(async (err) => {
         const { message } = await err.json();

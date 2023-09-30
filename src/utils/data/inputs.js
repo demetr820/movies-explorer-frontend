@@ -6,6 +6,7 @@ export const inputs = {
       name: "email",
       id: "email",
       val: {
+        pattern: "[a-z0-9]+@[a-z]+.[a-z]{2,3}",
         required: true,
       },
     },
@@ -37,6 +38,7 @@ export const inputs = {
       name: "email",
       id: "email",
       val: {
+        pattern: "[a-z0-9]+@[a-z]+.[a-z]{2,3}",
         required: true,
       },
     },

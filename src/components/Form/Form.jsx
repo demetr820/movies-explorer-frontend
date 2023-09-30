@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useValidation } from "../../hooks/useValidation";
 import Preloader from "../../components/Preloader/Preloader";
-import "./Form.css";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import "./Form.css";
 
-const Form = ({ children, textSubmit }) => {
+const Form = ({ children, handleFormSubmit, textSubmit }) => {
   const { values, handleChange, errors, isValid } = useValidation({});
   const { isLoading } = useContext(CurrentUserContext);
   const inputs = children.map((child, idx) => {
@@ -28,15 +28,27 @@ const Form = ({ children, textSubmit }) => {
       </div>
     );
   });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let data = {};
+    children.map((child) => {
+      data[child.name] = values[child.name];
+    });
+    handleFormSubmit(data);
+  };
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit}>
       {inputs}
-      <button
-        className={`form__submit ${isValid ? "" : " form__submit_disabled"}`}
-        disabled={!isValid}
-      >
-        {isLoading ? <Preloader /> : textSubmit}
-      </button>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <button
+          className={`form__submit ${isValid ? "" : " form__submit_disabled"}`}
+          disabled={!isValid || isLoading}
+        >
+          {textSubmit}
+        </button>
+      )}
     </form>
   );
 };

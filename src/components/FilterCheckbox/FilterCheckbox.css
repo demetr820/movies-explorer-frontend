@@ -15,6 +15,7 @@
   border-radius: 100px;
   position: relative;
   transition: background-color 0.1s;
+  opacity: 0.5;
 }
 
 .react-switch-label .react-switch-button {
@@ -34,7 +35,9 @@
   left: calc(100% - 2px);
   transform: translateX(-100%);
 }
-
+.react-switch-checkbox:checked + .react-switch-label {
+  opacity: 1;
+}
 .react-switch-label:active .react-switch-button {
   width: 60px;
 }

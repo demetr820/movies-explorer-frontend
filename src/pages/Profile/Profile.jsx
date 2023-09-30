@@ -1,18 +1,38 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
 import Preloader from "../../components/Preloader/Preloader";
 import { useValidation } from "../../hooks/useValidation";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import "./Profile.css";
 
-const Profile = () => {
-  const { isLoading } = useContext(CurrentUserContext);
-  const { values, handleChange, errors, isValid } = useValidation({});
+const Profile = ({ handleLogout, handleEditProfile }) => {
+  const [isEdit, setIsEdit] = useState(false);
+  const { isLoading, currentUser } = useContext(CurrentUserContext);
+  const { values, setValues, handleChange, errors, isValid } = useValidation(
+    {}
+  );
+
+  useEffect(() => {
+    setValues({ name: currentUser.name, email: currentUser.email });
+  }, [currentUser]);
+  useEffect(() => {
+    if (
+      values.name === currentUser.name &&
+      values.email === currentUser.email
+    ) {
+      setIsEdit(false);
+    } else {
+      setIsEdit(true);
+    }
+  }, [values.name, values.email, currentUser]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleEditProfile({ name: values.name, email: values.email });
+  };
   return (
     <>
       <section className="profile">
         <h2 className="profile__title">Привет, Виталий!</h2>
-        <form className="profile__form">
+        <form className="profile__form" onSubmit={handleSubmit}>
           <div className="profile__items-group">
             <label className="profile__label">Имя</label>
             <input
@@ -43,22 +63,23 @@ const Profile = () => {
               placeholder="E-mail"
               value={values.email || ""}
               onChange={handleChange}
+              pattern="[a-z0-9]+@[a-z]+.[a-z]{2,3}"
               required
             />
             <span className="profile__error">{errors.email}</span>
           </div>
           <button
             className={`profile__submit ${
-              isValid ? "" : " profile__submit_disabled"
+              isValid && isEdit ? "" : " profile__submit_disabled"
             }`}
-            disabled={!isValid}
+            disabled={!isValid || !isEdit || isLoading}
           >
             {isLoading ? <Preloader /> : "Редактировать"}
           </button>
         </form>
-        <Link className="profile__logout link-reset" relative to="../signin">
+        <a onClick={handleLogout} className="profile__logout link-reset">
           Выйти из аккаунта
-        </Link>
+        </a>
       </section>
     </>
   );

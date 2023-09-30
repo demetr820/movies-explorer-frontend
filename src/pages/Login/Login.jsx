@@ -5,7 +5,7 @@ import logo from "../../images/logo.svg";
 import { inputs } from "../../utils/data/inputs";
 import "./Login.css";
 
-const Login = () => {
+const Login = ({ handleLogin }) => {
   return (
     <section className="login">
       <div className="login__container">
@@ -13,7 +13,9 @@ const Login = () => {
           <img src={logo} alt="логотип" />
         </Link>
         <h2 className="login__title">Добро пожаловать!</h2>
-        <Form textSubmit="Войти">{inputs.login}</Form>
+        <Form handleFormSubmit={handleLogin} textSubmit="Войти">
+          {inputs.login}
+        </Form>
         <span className="login__login">
           Ещё не зарегистрированы?{" "}
           <Link className="login__link link-reset" relative to="../signup">
